@@ -31,7 +31,7 @@ var combine = function(dataA, dataB) {
         hash[e2.NAME].data=e2;
     })
     console.log(dataA)
-    drawMap(dataA)
+    setup(dataA)
 }
 
 var setup = function(geodata)
@@ -60,6 +60,35 @@ var setup = function(geodata)
             return 0
         }
     })])
+    
+    console.log("hi")
+    
+    var incarcerationcolor= 
+    d3.scaleSequential(d3.interpolatePurples)
+    .domain([0,d3.max(geodata,function(d) {    
+        var value = d.data
+       
+        if(value) {
+            return value.Income
+        }
+        else {
+            return 0
+        }
+    })])
+    
+    var wagecolor=
+       d3.scaleSequential(d3.interpolateReds)
+    .domain([0,d3.max(geodata,function(d) {    
+        var value = d.data
+       
+        if(value) {
+            return value.Income
+        }
+        else {
+            return 0
+        }
+    })])
+    
     //console.log(color.domain())
 
    
@@ -67,32 +96,62 @@ var setup = function(geodata)
     .translate([width/2, height/2])
     .scale([500])
    
-    var path=d3.geoPath()
+    var pathgenerator=d3.geoPath()
         .projection(d3.geoAlbersUsa())
    
    
     var svg = d3.select("svg")
     .attr("width", 900)
     .attr("height", 700)
-   
-    svg.selectAll("path")
+        console.log(incomecolor(5))
+drawMap(geodata,"Crime", pathgenerator, crimecolor,incarcerationcolor,wagecolor,incomecolor)
+
+}
+
+var drawMap = function(geodata, whichstring, pathgenerator, crimecolor, incarcerationcolor, wagecolor, incomecolor)
+{
+        console.log(incomecolor(5))
+    var map = d3.select("svg").selectAll("path")
     .data(geodata)
     .enter()
     .append("path")
-    .attr("d", path)
+    .attr("d", pathgenerator)
     .attr("fill", function(d) {
         var value = d.data
         console.log(d.data)
        
-        if(value) {
-            return crimecolor(value.Crime)
+        if(whichstring=="Crime") 
+        {
+            if(value) {
+                return crimecolor(value.Crime)
+            }
+            
+            else {
+                return "#ccc"
+            }
         }
-        else {
-            return "#ccc"
-        }})
+        else if(whichstring=="Incarceration")
+        {
+            if(value) {
+            return incarcerationcolor(value.Incarceration)
+            }
+            
+            else {
+                return "#ccc"
+            }
+        }
+        else if(whichstring=="Wage") 
+                {
+                    if(value) {
+                return wagecolor(value.Wage)
+                }
+                else {
+                    return "ccc"
+                }
+    }})
      
-    svg.selectAll("path")
-    .attr("d", path)
+    d3.select("svg").selectAll("path")
+    .attr("d", pathgenerator)
     .attr("stroke", function(d) {
         var value= d.data
         console.log(d.data)
@@ -110,12 +169,11 @@ var setup = function(geodata)
    
     })
     .attr("stroke-width", 3)
-
+    
 }
 
-
-
-/*on("mouseover", function(d) {
+    
+   /* .on("mouseover", function(d) {
     d3.select(this)
     svg.append("text")
     .attr("id","tooltip")
@@ -124,14 +182,17 @@ var setup = function(geodata)
     .attr("font-size", "25px")
     .attr("fill", "black")
     .text("Crime Rate Per 100,000 People: "+ value.Crime)
-})
+})*/
 
    
-}
+
+
+   
 
 
 
-var displayData = function(geodata) {
+
+/*var displayData = function(geodata) {
 var filterParameter=d3.select("#geoSelect")
     .property("value")
 
@@ -157,3 +218,4 @@ else if (filterParameter == "Minimum Wage")
     }
     return filterData
 })}*/
+
