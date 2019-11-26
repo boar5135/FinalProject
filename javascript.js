@@ -34,8 +34,7 @@ var combine = function(dataA, dataB) {
     drawMap(dataA)
 }
 
-
-var drawMap = function(geodata)
+var setup = function(geodata)
 {
     var crimecolor = d3.scaleSequential(d3.interpolateBlues)
     .domain([0,d3.max(geodata,function(d) {    
@@ -91,17 +90,17 @@ var drawMap = function(geodata)
         else {
             return "#ccc"
         }})
-   
+     
     svg.selectAll("path")
-    .data(geodata)
-    .enter()
-    .append("path")
     .attr("d", path)
     .attr("stroke", function(d) {
         var value= d.data
+        console.log(d.data)
        
         if (value)
         {
+            console.log(value.Income)
+            console.log(incomecolor(value.Income))
             return incomecolor(value.Income)
         }
         else 
@@ -110,10 +109,9 @@ var drawMap = function(geodata)
         }
    
     })
-    .attr("stroke-width", 10)
+    .attr("stroke-width", 3)
 
 }
-
 
 
 
