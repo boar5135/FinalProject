@@ -32,7 +32,7 @@ var combine = function(dataA, dataB) {
         hash[e2.NAME].data=e2;
     })
     console.log(dataA)
-    setupCrime(dataA)
+    setupIncarceration(dataA)
 }
 
 var setupCrime = function(geodata)
@@ -65,7 +65,7 @@ var setupCrime = function(geodata)
     console.log("hi")
     
     var incarcerationcolor= 
-    d3.scaleSequential(d3.interpolateOranges)
+    d3.scaleSequential(d3.interpolateGreens)
     .domain([0,d3.max(geodata,function(d) {    
         var value = d.data
        
@@ -139,7 +139,7 @@ var setupIncarceration = function(geodata)
     console.log("hi")
     
     var incarcerationcolor= 
-    d3.scaleSequential(d3.interpolateOranges)
+    d3.scaleSequential(d3.interpolateGreens)
     .domain([0,d3.max(geodata,function(d) {    
         var value = d.data
        
@@ -178,7 +178,7 @@ var setupIncarceration = function(geodata)
     var svg = d3.select("svg")
     .attr("width", 900)
     .attr("height", 700)
-        console.log(incomecolor(5))
+       
 drawMap(geodata,"Incarceration", pathgenerator, crimecolor,incarcerationcolor,wagecolor,incomecolor)
 
 }
@@ -213,7 +213,7 @@ var setupWage = function(geodata)
     console.log("hi")
     
     var incarcerationcolor= 
-    d3.scaleSequential(d3.interpolateOranges)
+    d3.scaleSequential(d3.interpolateGreens)
     .domain([0,d3.max(geodata,function(d) {    
         var value = d.data
        
@@ -257,15 +257,18 @@ drawMap(geodata,"Wage", pathgenerator, crimecolor,incarcerationcolor,wagecolor,i
 
 }
 
-var drawMap = function(geodata, whichstring, pathgenerator, crimecolor, incarcerationcolor, wagecolor, incomecolor)
-{
-        console.log(incomecolor(5))
+var drawMap = function(geodata, whichstring, pathgenerator, crimecolor, incarcerationcolor, wagecolor, incomecolor) {
+    
+        var svg = d3.select("svg")
+    .attr("width", 900)
+    .attr("height", 700)
+ 
     var map = d3.select("svg").selectAll("path")
     .data(geodata)
     .enter()
     .append("path")
     .attr("d", pathgenerator)
-    .attr("fill", function(d) {
+     .attr("fill", function(d) {
         var value = d.data
         console.log(d.data)
        
@@ -297,9 +300,91 @@ var drawMap = function(geodata, whichstring, pathgenerator, crimecolor, incarcer
                 else {
                     return "ccc"
                 }
+       
+                }})
+    
+.on("mouseover", function(d)
+ {
+     if (whichstring == "Crime") 
+{
+     d3.selectAll("path")
+    svg.append("text")
+    .attr("id","tooltip")
+     .attr("x", 650)
+     .attr("y", 20)
+     .attr("font-size", "25px")
+     .attr("fill","black")
+.text(d.properties.NAME)
+    
+    svg.append("text")
+    .attr("id", "tooltip")
+    .attr("x", 650)
+    .attr("y", 50)
+    .attr("font-size", "11px")
+    .text("Crime Per 100,000 People:  " +  d.data.Crime)
+    
+    svg.append("text")
+    .attr("id", "tooltip")
+    .attr("x", 650)
+    .attr("y", 80)
+    .attr("font-size", "11px")
+    .text("Median Household Income:  " + "$" + d.data.Income)
+ }
+     else if (whichstring=="Incarceration") 
+{
+d3.select("path")
+    svg.append("text")
+    .attr("id","tooltip")
+     .attr("x", 645)
+     .attr("y", 20)
+     .attr("font-size", "25px")
+     .attr("fill","black")
+.text(d.properties.NAME)
+         
+    svg.append("text")
+    .attr("id", "tooltip")
+    .attr("x", 645)
+    .attr("y", 50)
+    .attr("font-size", "11px")
+    .text("Incarceration Per 100,000 People:  " + d.data.Incarceration) 
+    
+    svg.append("text")
+    .attr("id", "tooltip")
+    .attr("x", 645)
+    .attr("y", 80)
+    .attr("font-size", "11px")
+    .text("Median Household Income:  " + "$" + d.data.Income)
+
+}
+ 
+else if (whichstring=="Wage") 
+    {
+    d3.select("path")
+    svg.append("text")
+    .attr("id","tooltip")
+     .attr("x", 645)
+     .attr("y", 20)
+     .attr("font-size", "25px")
+     .attr("fill","black")
+.text(d.properties.NAME)
+    svg.append("text")
+    .attr("id", "tooltip")
+    .attr("x", 645)
+    .attr("y", 50)
+    .attr("font-size", "11px")
+    .text("Average Minimum Wage" + d.data.Wage)
+     svg.append("text")
+    .attr("id", "tooltip")
+    .attr("x", 645)
+    .attr("y", 80)
+    .attr("font-size", "11px")
+    .text("Median Household Income:  " + "$" + d.data.Income)
     }})
-     
-    d3.select("svg").selectAll("path")
+.on("mouseout", function() {
+    d3.selectAll("#tooltip").remove()
+})
+    
+ d3.select("svg").selectAll("path")
     .attr("d", pathgenerator)
     .attr("stroke", function(d) {
         var value= d.data
@@ -337,8 +422,6 @@ var changeMap = function(geodata) {
     d3.select("#changeMap")
     .on("click", function()
     {
-        d3.select("path")
-        .remove()
         return displayData(geodata)
     }
 )}
@@ -349,8 +432,9 @@ var displayData = function(geodata) {
 var filterParameter=d3.select("#geoSelect")
     .property("value")
 
-var filterData= geodata.filter(function()
- {
+var filterData= geodata.filter(function(geodata)
+ 
+{
 if (filterParameter == "Crime Rate")
 {
 return setupCrime(geodata)
@@ -370,5 +454,6 @@ else if (filterParameter == "Minimum Wage")
     }
     return filterData
 })}
+
 
 
