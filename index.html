@@ -3,15 +3,18 @@
     <head><script src="https://d3js.org/d3.v5.min.js"></script>
     <link rel=stylesheet type="text/css" href="style.css"></head>
 <body>
-<h1 id=banner>CSC 160</h1>   
-    <svg></svg>
-    <span id="geoPick">National Median  Household Income VS</span>
+<h1 id=banner>CSC 160</h1>  
+    <div id="tooltip" class="hidden"></div>
+    <svg id="map"></svg>
+    <svg id="legend"></svg>
+    <span id="geoPick">National Median  Household Income VS
     <select id="geoSelect">
-    <option>Crime Rate</option>
-    <option>Violence Rate</option>
+    <option>Crime Rate per 100,000 people</option>
+    <option>Incarceration Rate per 100,000 people</option>
     <option>Minimum Wage</option>
     </select>
-   
+     <button id="changeMap">Display Map</button>
+    </span>
     <script src="javascript.js"></script>
 </body>
 </html>
