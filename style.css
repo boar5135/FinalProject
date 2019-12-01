@@ -1,4 +1,7 @@
-svg {
-    margin-left:auto;
-    margin-right:auto;
+#legend {
+    float:right;
+}
+#geoPick {
+    margin-bottom: 30px;
+    float:left;
 }
