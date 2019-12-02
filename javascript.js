@@ -10,7 +10,6 @@ Promise.all([mapPromise, dataPromise]).then(
 function(data) {
     console.log("works", data)
     combine(data[0].features,data[1])
-    //changeMap(data)
     //d3.select("#banner".text("Final Project"));
 
 },
@@ -32,7 +31,8 @@ var combine = function(dataA, dataB) {
         hash[e2.NAME].data=e2;
     })
     console.log(dataA)
-setupIncarceration(dataA)
+setupCrime(dataA)
+    changeMap(dataA)
 }
 
 var setupCrime = function(geodata)
@@ -400,43 +400,52 @@ var drawMap = function(geodata, whichstring, pathgenerator, crimecolor, incarcer
     .attr("d", pathgenerator)
      .attr("fill", function(d) {
         var value = d.data
-        console.log(d.data)
+        //console.log(d.data)
        
         if(whichstring=="Crime") 
         {
-            if(value) {
+            if(value) 
+            {
                 return crimecolor(value.Crime)
             }
             
-            else {
+            else 
+            {
                 return "#ccc"
             }
         }
         else if(whichstring=="Incarceration")
         {
-            if(value) {
+            if(value)
+            {
             return incarcerationcolor(value.Incarceration)
             }
             
-            else {
+            else 
+            {
                 return "#ccc"
             }
         }
         else if(whichstring=="Wage") 
+        {
+                    if(value) 
                 {
-                    if(value) {
                 return wagecolor(value.Wage)
                 }
-                else {
+                else 
+                {
                     return "ccc"
                 }
        
-                }})
-    
+        }
+     })
+
 .on("mouseover", function(d)
  {
+    console.log("Crime")
      if (whichstring == "Crime") 
 {
+    console.log("Crime")
      d3.selectAll("path")
     svg.append("text")
     .attr("id","tooltip")
@@ -519,7 +528,7 @@ else if (whichstring=="Wage")
     .attr("d", pathgenerator)
     .attr("stroke", function(d) {
         var value= d.data
-        console.log(d.data)
+        //console.log(d.data)
        
         if (value)
         {
@@ -530,36 +539,26 @@ else if (whichstring=="Wage")
             return "#ccc"
         }})
     .attr("stroke-width", 4)
-   /* .on("mouseover", function (d) {
-     d3.select("path")
+    .on("mouseover", function (d) {
+     d3.select(this)
      .attr("stroke-width", function (d) {
          {return 5}
      })
  })
     .on("mouseout", function(d) {
-     d3.select("path")
+     d3.select(this)
      .attr("stroke-width", function (d) {
-         {return 3}*/
+         {return 3}
    
-}
+})})}
     
 
-    
-   /* .on("mouseover", function(d) {
-    d3.select(this)
-    svg.append("text")
-    .attr("id","tooltip")
-    .attr("x", 30)
-    .attr("y", 40)
-    .attr("font-size", "25px")
-    .attr("fill", "black")
-    .text("Crime Rate Per 100,000 People: "+ value.Crime)
-})*/
-
-/*var changeMap = function(geodata) {
+var changeMap = function(geodata) {
     d3.select("#changeMap")
     .on("click", function()
     {
+        d3.select("#map").selectAll("*").remove()
+        d3.select("#legend").selectAll("*").remove()
         return displayData(geodata)
     }
 )}
@@ -569,17 +568,15 @@ else if (whichstring=="Wage")
 var displayData = function(geodata) {
 var filterParameter=d3.select("#geoSelect")
     .property("value")
-
-var filterData= geodata.filter(function(geodata)
- 
+console.log(filterParameter)
 {
-if (filterParameter == "Crime Rate")
+if (filterParameter == "Crime Rate per 100,000 people")
 {
 return setupCrime(geodata)
    
 }
    
-else if (filterParameter == "Incarceration Rate")
+else if (filterParameter == "Incarceration Rate per 100,000 people")
    
 {
     return setupIncarceration(geodata)
@@ -591,6 +588,4 @@ else if (filterParameter == "Minimum Wage")
          return setupWage(geodata)
     }
     return filterData
-})}*/
-
-
+}}
