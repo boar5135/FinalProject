@@ -649,7 +649,7 @@ var drawMap = function(geodata, whichstring, pathgenerator, crimecolor, incarcer
     .attr("x", 650)
     .attr("y", 50)
     .attr("font-size", "11px")
-    .text("Violent Crime Per 100,000 People:  " +  d.data.Crime)
+    .text("Crime Per 100,000 People:  " +  d.data.Crime)
     
     svg.append("text")
     .attr("id", "tooltip")
