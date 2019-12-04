@@ -51,7 +51,7 @@ var setupCrime = function(geodata)
     //console.log(color.domain())
     
     var setHeader=function(d) {
-        d3.select("#change").text("Crime Rate:")
+        d3.select("#change").text("Violent Crime Rate:")
     }
    
     var incomecolor = d3.scaleSequential(d3.interpolateGreys)
@@ -649,7 +649,7 @@ var drawMap = function(geodata, whichstring, pathgenerator, crimecolor, incarcer
     .attr("x", 650)
     .attr("y", 50)
     .attr("font-size", "11px")
-    .text("Crime Per 100,000 People:  " +  d.data.Crime)
+    .text("Violent Crime Per 100,000 People:  " +  d.data.Crime)
     
     svg.append("text")
     .attr("id", "tooltip")
@@ -776,7 +776,7 @@ var filterParameter=d3.select("#geoSelect")
     .property("value")
 console.log(filterParameter)
 {
-if (filterParameter == "Crime Rate per 100,000 people")
+if (filterParameter == "Violent Crime Rate per 100,000 people")
 {
 return setupCrime(geodata)
    
